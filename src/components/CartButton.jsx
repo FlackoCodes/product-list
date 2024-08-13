@@ -3,9 +3,13 @@ import { decreaseItems, increaseItems } from "../store/slices/cartAddSlice";
 import { FaMinus } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
 
-export default function Button() {
+export default function Button({ addToCart }) {
   const disptach = useDispatch();
   const count = useSelector((state) => state.cart.value);
+
+  function addToCart(currentItem) {
+    console.log(`add to cart, ${currentItem}`);
+  }
 
   return (
     <button className="mt-[-20%] font-bold text-lg bg-red-600 text-white border-[2px] border-red-600 rounded-full py-1 px-3 flex justify-between items-center gap-5">

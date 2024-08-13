@@ -5,12 +5,16 @@ import Button from "./cartButton";
 import AddButton from "./AddButton";
 
 export default function Home() {
-  const [cart, setCart] = useState(0);
+  const [totalCart, setTotalCart] = useState(0);
   const [clickedIndex, setClickedIndex] = useState(null);
 
   const handleClick = (index) => {
     // Toggle between showing AddButton and Button for the clicked product
     setClickedIndex((prevIndex) => (prevIndex === index ? null : index));
+  };
+
+  const addToCart = (currentItem) => {
+    console.log("added to cart", currentItem);
   };
 
   return (
@@ -39,7 +43,7 @@ export default function Home() {
                   />
                   <div className="flex justify-center mb-2">
                     {clickedIndex === index ? (
-                      <Button />
+                      <Button addToCart={() => addToCart(index)} />
                     ) : (
                       <AddButton handleClick={() => handleClick(index)} />
                     )}
@@ -59,7 +63,7 @@ export default function Home() {
         <div className="rounded-md w-fit mt-4">
           <div className="bg-white p-5 rounded-sm">
             <h2 className="mt-3 font-bold text-2xl text-orange-800 capitalize">
-              your cart ({cart})
+              your cart ({totalCart})
             </h2>
             <div className="flex flex-col items-center justify-center gap-2">
               <img src={emptyCart} alt="empty cart" />
