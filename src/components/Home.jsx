@@ -1,9 +1,18 @@
 import { useState } from "react";
 import data from "../data";
 import emptyCart from "../images/illustration-empty-cart.svg";
+import Button from "./cartButton";
+import AddButton from "./AddButton";
 
 export default function Home() {
   const [cart, setCart] = useState(0);
+  const [clickedIndex, setClickedIndex] = useState(null);
+
+  const handleClick = (index) => {
+    // Toggle between showing AddButton and Button for the clicked product
+    setClickedIndex((prevIndex) => (prevIndex === index ? null : index));
+  };
+
   return (
     <>
       <div className="my-10 grid lg:grid-cols-[3fr_1fr] gap-x-5 md:grid-cols-[2fr_1fr]">
@@ -29,9 +38,11 @@ export default function Home() {
                     alt={data.name}
                   />
                   <div className="flex justify-center mb-2">
-                    <button className="mt-[-15%] font-bold text-lg bg-white border-[2px] border-red-800 rounded-full py-1 px-3">
-                      add to cart
-                    </button>
+                    {clickedIndex === index ? (
+                      <Button />
+                    ) : (
+                      <AddButton handleClick={() => handleClick(index)} />
+                    )}
                   </div>
                 </picture>
                 <div>
