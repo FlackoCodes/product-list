@@ -1,26 +1,31 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { decreaseItems, increaseItems } from "../store/slices/cartAddSlice";
-import { FaMinus } from "react-icons/fa";
-import { FaPlus } from "react-icons/fa6";
+import { FaMinus, FaPlus } from "react-icons/fa";
 
-export default function Button({ addToCart }) {
-  const disptach = useDispatch();
+export default function Button({ handleClick }) {
+  const dispatch = useDispatch();
   const count = useSelector((state) => state.cart.value);
 
-  function addToCart(currentItem) {
-    console.log(`add to cart, ${currentItem}`);
-  }
-
+  // Call the addToCart function passed as a prop
   return (
-    <button className="mt-[-20%] font-bold text-lg bg-red-600 text-white border-[2px] border-red-600 rounded-full py-1 px-3 flex justify-between items-center gap-5">
+    <button
+      onClick={handleClick}
+      className="mt-[-20%] font-bold text-lg bg-red-600 text-white border-[2px] border-red-600 rounded-full py-1 px-3 flex justify-between items-center gap-5"
+    >
       <FaMinus
         className="text-white"
-        onClick={() => disptach(decreaseItems())}
+        onClick={(e) => {
+          e.stopPropagation(); // Prevents this click from bubbling up
+          dispatch(decreaseItems());
+        }}
       />
       {count}
       <FaPlus
         className="text-white"
-        onClick={() => disptach(increaseItems())}
+        onClick={(e) => {
+          e.stopPropagation(); // Prevents this click from bubbling up
+          dispatch(increaseItems());
+        }}
       />
     </button>
   );
