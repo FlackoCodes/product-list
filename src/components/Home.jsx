@@ -1,9 +1,10 @@
 import { useState } from "react";
 import data from "../data";
-import emptyCart from "../images/illustration-empty-cart.svg";
-import Button from "./cartButton";
-import AddButton from "./AddButton";
+// import Button from "./cartButton";
+// import AddButton from "./AddButton";
 import { CgShoppingCart } from "react-icons/cg";
+import Cart from "./EmptyCart";
+import AddedCart from "./AddedCart";
 
 export default function Home() {
   const [totalCart, setTotalCart] = useState(0);
@@ -32,7 +33,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="my-10 grid lg:grid-cols-[3fr_1fr] gap-x-5 md:grid-cols-[2fr_1fr]">
+      <div className="my-10 grid lg:grid-cols-[2.8fr_1.2fr] gap-x-5 md:grid-cols-[2fr_1fr]">
         <div>
           <div>
             <h1 className="text-3xl font-bold text-zinc-900 mb-4">Desserts</h1>
@@ -85,11 +86,8 @@ export default function Home() {
             <h2 className="mt-3 font-bold text-2xl text-orange-800 capitalize">
               your cart ({totalCart})
             </h2>
-            <div className="flex flex-col items-center justify-center gap-2">
-              <img src={emptyCart} alt="empty cart" />
-              <p className="text-center text-sm font-semibold text-stone-600">
-                Your added items will appear here
-              </p>
+            <div className="flex flex-col items-center justify-center gap-1">
+              {cart.length ? <AddedCart cart={cart} /> : <Cart />}
             </div>
           </div>
         </div>
