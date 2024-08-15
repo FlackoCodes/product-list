@@ -2,13 +2,12 @@
 import delFromCart from "../images/icon-remove-item.svg";
 import iconCarbon from "../images/icon-carbon-neutral.svg";
 
-export default function AddedCart({ cart }) {
+export default function AddedCart({ cart, removeFromcart }) {
   // Calculate the total price
   const totalPrice = cart.reduce((total, item) => total + item.price, 0);
 
   return (
     <div className="flex flex-col p-4">
-      {/* Map over cart items */}
       {cart.map((item) => (
         <div
           key={item.id}
@@ -26,6 +25,7 @@ export default function AddedCart({ cart }) {
             </div>
           </div>
           <img
+            onClick={()=>removeFromcart(item)}
             src={delFromCart}
             alt="remove from cart"
             className="cursor-pointer"
@@ -45,7 +45,9 @@ export default function AddedCart({ cart }) {
         <div className="bg-amber-100 flex items-center rounded-lg  py-4 px-2">
           <img src={iconCarbon} alt="carbon-icon" />
           <p className="font-semibold text-sm text-stone-400">
-            This is a <span className="text-red-950 font-semibold"> carbon-neutral</span> delivery
+            This is a{" "}
+            <span className="text-red-950 font-semibold"> carbon-neutral</span>{" "}
+            delivery
           </p>
         </div>
         <button className="border-none bg-red-800 py-2 px-4 text-center text-lg font-bold text-white rounded-full my-3">

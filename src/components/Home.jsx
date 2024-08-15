@@ -9,11 +9,18 @@ import AddedCart from "./AddedCart";
 export default function Home() {
   const [totalCart, setTotalCart] = useState(0);
   const [cart, setCart] = useState([]);
-  const [clickedIndex, setClickedIndex] = useState(null);
+  // const [clickedIndex, setClickedIndex] = useState(null);
 
   // const handleClick = (index) => {
   //   setClickedIndex((prevIndex) => (prevIndex === index ? null : index));
   // };
+
+  const removeFromCart = (currentItem) => {
+    setCart((prevCart) =>
+      prevCart.filter((item) => item.id !== currentItem.id)
+    );
+    setTotalCart((prevTotal) => prevTotal - 1);
+  };
 
   const addItemToCart = (currentItem) => {
     console.log("Attempting to add to cart", currentItem);
@@ -87,7 +94,11 @@ export default function Home() {
               your cart ({totalCart})
             </h2>
             <div className="flex flex-col items-center justify-center gap-1">
-              {cart.length ? <AddedCart cart={cart} /> : <Cart />}
+              {cart.length ? (
+                <AddedCart cart={cart} removeFromcart={removeFromCart} />
+              ) : (
+                <Cart />
+              )}
             </div>
           </div>
         </div>
