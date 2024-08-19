@@ -1,17 +1,20 @@
 import { useState } from "react";
 import data from "../data";
-// import Button from "./cartButton";
-// import AddButton from "./AddButton";
+import Button from "./cartButton";
+import AddButton from "./AddButton";
 import { CgShoppingCart } from "react-icons/cg";
 import Cart from "./EmptyCart";
 import AddedCart from "./AddedCart";
 
 export default function Home() {
   const [totalCart, setTotalCart] = useState(0);
-  const [cart, setCart] = useState([]);
+  // const [cart, setCart] = useState([]);
+  // const [newOrder, setNewOrder] = useState(false);
   // const [clickedIndex, setClickedIndex] = useState(null);
 
   // const handleClick = (index) => {
+  //   console.log("current index", index);
+
   //   setClickedIndex((prevIndex) => (prevIndex === index ? null : index));
   // };
 
@@ -20,6 +23,11 @@ export default function Home() {
       prevCart.filter((item) => item.id !== currentItem.id)
     );
     setTotalCart((prevTotal) => prevTotal - 1);
+  };
+
+  const existsInCart = (currentItem) => {
+    const itemExists = cart.some((item) => item.id === currentItem.id);
+    return itemExists;
   };
 
   const addItemToCart = (currentItem) => {
@@ -46,46 +54,49 @@ export default function Home() {
             <h1 className="text-3xl font-bold text-zinc-900 mb-4">Desserts</h1>
           </div>
           <div className="grid lg:grid-cols-3 gap-4 md:grid-cols-2">
-            {data.map((item) => (
-              <div key={item.id}>
-                <picture className="relative">
-                  <source
-                    media="(min-width: 1020px)"
-                    srcSet={item.image.desktop}
-                  />
-                  <source
-                    media="(min-width: 768px)"
-                    srcSet={item.image.tablet}
-                  />
-                  <img
-                    className="rounded-md mb-4"
-                    src={item.image.mobile || item.image.thumbnail}
-                    alt={item.name}
-                  />
-                  <div className="flex justify-center mb-2">
-                    {/* {clickedIndex === index ? (
-                      <Button handleClick={() => handleClick(index)} />
-                    ) : (
-                      <AddButton addItemToCart={() => addItemToCart(item)} />
-                    )} */}
-                    <button
+            {data.map((item, index) => {
+              console.log("map index", index);
+              return (
+                <div key={item.id}>
+                  <picture className="relative">
+                    <source
+                      media="(min-width: 1020px)"
+                      srcSet={item.image.desktop}
+                    />
+                    <source
+                      media="(min-width: 768px)"
+                      srcSet={item.image.tablet}
+                    />
+                    <img
+                      className="rounded-md mb-4"
+                      src={item.image.mobile || item.image.thumbnail}
+                      alt={item.name}
+                    />
+                    <div className="flex justify-center mb-2">
+                      {existsInCart(item) ? (
+                        <Button />
+                      ) : (
+                        <AddButton addToCart={() => addItemToCart(item)} />
+                      )}
+                      {/* <button
                       onClick={() => addItemToCart(item)}
                       className="mt-[-20%] font-bold text-lg bg-white border-[2px] border-red-800 rounded-full py-1 px-3 flex justify-between items-center gap-1"
                     >
                       <CgShoppingCart className="text-orange-700 text-xl" />
                       Add to Cart
-                    </button>
+                    </button> */}
+                    </div>
+                  </picture>
+                  <div>
+                    <p className="font-semibold text-stone-700">
+                      {item.category}
+                    </p>
+                    <p className="font-extrabold text-stone-800">{item.name}</p>
+                    <p className="font-bold text-orange-800">{`$${item.price}`}</p>
                   </div>
-                </picture>
-                <div>
-                  <p className="font-semibold text-stone-700">
-                    {item.category}
-                  </p>
-                  <p className="font-extrabold text-stone-800">{item.name}</p>
-                  <p className="font-bold text-orange-800">{`$${item.price}`}</p>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
         <div className="rounded-md w-fit mt-4">

@@ -1,10 +1,25 @@
+//
 /* eslint-disable react/prop-types */
 import delFromCart from "../images/icon-remove-item.svg";
 import iconCarbon from "../images/icon-carbon-neutral.svg";
+import { useState } from "react";
+import ModalPopup from "./ModalPopup";
 
-export default function AddedCart({ cart, removeFromcart }) {
-  // Calculate the total price
+export default function AddedCart({ cart, removeFromCart, startNewOrder }) {
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
   const totalPrice = cart.reduce((total, item) => total + item.price, 0);
+
+  const openModal = () => {
+    setIsModalOpen(true); // Show the modal
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false); // Hide the modal
+  };
+
+  const handleStartNewOrder = () => {
+    closeModal();
+  };
 
   return (
     <div className="flex flex-col p-4">
@@ -25,7 +40,7 @@ export default function AddedCart({ cart, removeFromcart }) {
             </div>
           </div>
           <img
-            onClick={()=>removeFromcart(item)}
+            onClick={() => removeFromCart(item)}
             src={delFromCart}
             alt="remove from cart"
             className="cursor-pointer"
@@ -42,7 +57,7 @@ export default function AddedCart({ cart, removeFromcart }) {
             ${totalPrice.toFixed(2)}
           </p>
         </div>
-        <div className="bg-amber-100 flex items-center rounded-lg  py-4 px-2">
+        <div className="bg-amber-100 flex items-center rounded-lg py-4 px-2">
           <img src={iconCarbon} alt="carbon-icon" />
           <p className="font-semibold text-sm text-stone-400">
             This is a{" "}
@@ -50,10 +65,21 @@ export default function AddedCart({ cart, removeFromcart }) {
             delivery
           </p>
         </div>
-        <button className="border-none bg-red-800 py-2 px-4 text-center text-lg font-bold text-white rounded-full my-3">
+        <button
+          onClick={openModal}
+          className="border-none bg-red-800 py-2 px-4 text-center text-lg font-bold text-white rounded-full my-3"
+        >
           Confirm Order
         </button>
       </div>
+
+      {isModalOpen && (
+        <ModalPopup
+          cart={cart}
+          total={totalPrice.toFixed(2)} // Pass formatted total price
+          startNewOrder={handleStartNewOrder}
+        />
+      )}
     </div>
   );
 }
