@@ -1,11 +1,10 @@
-//
 /* eslint-disable react/prop-types */
 import delFromCart from "../images/icon-remove-item.svg";
 import iconCarbon from "../images/icon-carbon-neutral.svg";
 import { useState } from "react";
 import ModalPopup from "./ModalPopup";
 
-export default function AddedCart({ cart, removeFromCart, startNewOrder }) {
+export default function AddedCart({ cart, removeItem }) {
   const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
   const totalPrice = cart.reduce((total, item) => total + item.price, 0);
 
@@ -29,6 +28,7 @@ export default function AddedCart({ cart, removeFromCart, startNewOrder }) {
           className="flex justify-between items-center py-2 border-b border-gray-300"
         >
           <div className="flex items-center justify-between gap-4 space-x-4">
+            {/* Optional image display */}
             {/* <img
               src={item.image.thumbnail}
               alt={item.name}
@@ -40,7 +40,7 @@ export default function AddedCart({ cart, removeFromCart, startNewOrder }) {
             </div>
           </div>
           <img
-            onClick={() => removeFromCart(item)}
+            onClick={() => removeItem(item)} // Pass the specific item here
             src={delFromCart}
             alt="remove from cart"
             className="cursor-pointer"
@@ -60,7 +60,7 @@ export default function AddedCart({ cart, removeFromCart, startNewOrder }) {
         <div className="bg-amber-100 flex items-center rounded-lg py-4 px-2">
           <img src={iconCarbon} alt="carbon-icon" />
           <p className="font-semibold text-sm text-stone-400">
-            This is a{" "}
+            This is a
             <span className="text-red-950 font-semibold"> carbon-neutral</span>{" "}
             delivery
           </p>

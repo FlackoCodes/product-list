@@ -1,119 +1,78 @@
-import { useState } from "react";
+// import { useState } from "react";
 import data from "../data";
 import Button from "./cartButton";
 import AddButton from "./AddButton";
-import { CgShoppingCart } from "react-icons/cg";
+// import { CgShoppingCart } from "react-icons/cg";
 import Cart from "./EmptyCart";
 import AddedCart from "./AddedCart";
+import { useDispatch, useSelector } from "react-redux";
+import { addItemToCart, removeFromCart } from "../store/slices/cartAddSlice";
 
 export default function Home() {
-  const [totalCart, setTotalCart] = useState(0);
-  // const [cart, setCart] = useState([]);
-  // const [newOrder, setNewOrder] = useState(false);
-  // const [clickedIndex, setClickedIndex] = useState(null);
+  const dispatch = useDispatch();
+  const cart = useSelector((state) => state.cart.cart);
+  const totalCart = useSelector((state) => state.cart.totalCart);
 
-  // const handleClick = (index) => {
-  //   console.log("current index", index);
-
-  //   setClickedIndex((prevIndex) => (prevIndex === index ? null : index));
-  // };
-
-  const removeFromCart = (currentItem) => {
-    setCart((prevCart) =>
-      prevCart.filter((item) => item.id !== currentItem.id)
-    );
-    setTotalCart((prevTotal) => prevTotal - 1);
+  // Function to remove item from cart
+  const removeItem = (item) => {
+    dispatch(removeFromCart(item));
   };
 
   const existsInCart = (currentItem) => {
-    const itemExists = cart.some((item) => item.id === currentItem.id);
-    return itemExists;
+    return cart.some((item) => item.id === currentItem.id);
   };
-
-  const addItemToCart = (currentItem) => {
-    console.log("Attempting to add to cart", currentItem);
-
-    const itemExists = cart.some((item) => item.id === currentItem.id);
-
-    if (!itemExists) {
-      setCart((prevCart) => [...prevCart, currentItem]);
-      setTotalCart((prevTotal) => prevTotal + 1);
-      console.log("Added to cart", currentItem);
-    } else {
-      console.log("Item already in cart", currentItem);
-    }
-  };
-
-  console.log(cart);
 
   return (
-    <>
-      <div className="my-10 grid lg:grid-cols-[2.8fr_1.2fr] gap-x-5 md:grid-cols-[2fr_1fr]">
+    <div className="my-10 grid lg:grid-cols-[2.8fr_1.2fr] gap-x-5 md:grid-cols-[2fr_1fr]">
+      <div>
         <div>
-          <div>
-            <h1 className="text-3xl font-bold text-zinc-900 mb-4">Desserts</h1>
-          </div>
-          <div className="grid lg:grid-cols-3 gap-4 md:grid-cols-2">
-            {data.map((item, index) => {
-              console.log("map index", index);
-              return (
-                <div key={item.id}>
-                  <picture className="relative">
-                    <source
-                      media="(min-width: 1020px)"
-                      srcSet={item.image.desktop}
-                    />
-                    <source
-                      media="(min-width: 768px)"
-                      srcSet={item.image.tablet}
-                    />
-                    <img
-                      className="rounded-md mb-4"
-                      src={item.image.mobile || item.image.thumbnail}
-                      alt={item.name}
-                    />
-                    <div className="flex justify-center mb-2">
-                      {existsInCart(item) ? (
-                        <Button />
-                      ) : (
-                        <AddButton addToCart={() => addItemToCart(item)} />
-                      )}
-                      {/* <button
-                      onClick={() => addItemToCart(item)}
-                      className="mt-[-20%] font-bold text-lg bg-white border-[2px] border-red-800 rounded-full py-1 px-3 flex justify-between items-center gap-1"
-                    >
-                      <CgShoppingCart className="text-orange-700 text-xl" />
-                      Add to Cart
-                    </button> */}
-                    </div>
-                  </picture>
-                  <div>
-                    <p className="font-semibold text-stone-700">
-                      {item.category}
-                    </p>
-                    <p className="font-extrabold text-stone-800">{item.name}</p>
-                    <p className="font-bold text-orange-800">{`$${item.price}`}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <h1 className="text-3xl font-bold text-zinc-900 mb-4">Desserts</h1>
         </div>
-        <div className="rounded-md w-fit mt-4">
-          <div className="bg-white p-5 rounded-sm">
-            <h2 className="mt-3 font-bold text-2xl text-orange-800 capitalize">
-              your cart ({totalCart})
-            </h2>
-            <div className="flex flex-col items-center justify-center gap-1">
-              {cart.length ? (
-                <AddedCart cart={cart} removeFromcart={removeFromCart} />
-              ) : (
-                <Cart />
-              )}
+        <div className="grid lg:grid-cols-3 gap-4 md:grid-cols-2">
+          {data.map((item) => (
+            <div key={item.id}>
+              <picture className="relative">
+                <source media="(min-width: 1020px)" srcSet={item.image.desktop} />
+                <source media="(min-width: 768px)" srcSet={item.image.tablet} />
+                <img
+                  className="rounded-md mb-4"
+                  src={item.image.mobile || item.image.thumbnail}
+                  alt={item.name}
+                />
+                <div className="flex justify-center mb-2">
+                  {existsInCart(item) ? (
+                    <Button />
+                  ) : (
+                    <AddButton
+                      addToCart={() => dispatch(addItemToCart(item))}
+                    />
+                  )}
+                </div>
+              </picture>
+              <div>
+                <p className="font-semibold text-stone-700">{item.category}</p>
+                <p className="font-extrabold text-stone-800">{item.name}</p>
+                <p className="font-bold text-orange-800">{`$${item.price}`}</p>
+              </div>
             </div>
+          ))}
+        </div>
+      </div>
+      <div className="rounded-md w-fit mt-4">
+        <div className="bg-white p-5 rounded-sm">
+          <h2 className="mt-3 font-bold text-2xl text-orange-800 capitalize">
+            your cart ({totalCart})
+          </h2>
+          <div className="flex flex-col items-center justify-center gap-1">
+            {cart.length ? (
+              <AddedCart cart={cart} removeItem={removeItem} />
+            ) : (
+              <Cart />
+            )}
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
+
