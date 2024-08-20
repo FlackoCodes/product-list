@@ -2,7 +2,6 @@
 import data from "../data";
 import Button from "./cartButton";
 import AddButton from "./AddButton";
-// import { CgShoppingCart } from "react-icons/cg";
 import Cart from "./EmptyCart";
 import AddedCart from "./AddedCart";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,7 +12,6 @@ export default function Home() {
   const cart = useSelector((state) => state.cart.cart);
   const totalCart = useSelector((state) => state.cart.totalCart);
 
-  // Function to remove item from cart
   const removeItem = (item) => {
     dispatch(removeFromCart(item));
   };
@@ -32,11 +30,14 @@ export default function Home() {
           {data.map((item) => (
             <div key={item.id}>
               <picture className="relative">
-                <source media="(min-width: 1020px)" srcSet={item.image.desktop} />
+                <source
+                  media="(min-width: 1020px)"
+                  srcSet={item.image.desktop}
+                />
                 <source media="(min-width: 768px)" srcSet={item.image.tablet} />
                 <img
                   className="rounded-md mb-4"
-                  src={item.image.mobile || item.image.thumbnail}
+                  src={item.image.mobile}
                   alt={item.name}
                 />
                 <div className="flex justify-center mb-2">
@@ -75,4 +76,3 @@ export default function Home() {
     </div>
   );
 }
-

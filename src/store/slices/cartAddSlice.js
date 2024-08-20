@@ -21,7 +21,7 @@ export const cartSlice = createSlice({
 
       if (!itemExists) {
         state.cart.push(currentItem);
-        state.totalItems += 1;
+        state.totalCart += 1;
       }
     },
     removeFromCart(state, { payload: currentItem }) {

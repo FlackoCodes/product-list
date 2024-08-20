@@ -11,26 +11,31 @@ export default function ModalPopup({ cart, total, startNewOrder }) {
           <h2 className="font-bold text-2xl text-red-950 capitalize">
             Order Confirmed
           </h2>
-          <p className="font-bold text-sm text-[rgba(206,185,185,0.86)]">
+          <p className="font-bold text-sm text-[rgba(206,185,185,0.86)] my-2">
             We hope you enjoy your food!
           </p>
         </div>
-        <div className="bg-[#f7dcb9] rounded-sm">
+        <div className="bg-[antiquewhite] rounded-sm px-4">
           {cart.map((item) => (
             <div key={item.id}>
-              <div className="flex justify-between items-center my-2">
+              <div className="flex justify-between gap-4 items-center align-middle my-2">
                 <div className="flex gap-2">
-                  <img
-                    className="rounded-sm w-10 h-10 block"
-                    src={item.image.thumbnail}
-                    alt={item.name}
-                  />
-                  <p>{`@${item.price}`}</p>
                   <div>
+                    <img
+                      className="rounded-sm w-14 h-14 block"
+                      src={item.image.thumbnail}
+                      alt={item.name}
+                    />
+                  </div>
+                  <div className="flex flex-col">
                     <h3 className="text-red-950 text-lg font-bold">
                       {item.name}
                     </h3>
-                    <p className="text-[#f7dcb9] font-bold">{item.price}</p>
+                    <div className="flex gap-3 items-center">
+                      <span className="fot-bold text-red-500 text-xl">1x</span>
+                      <p className="text-[burlywood]">{`@${item.price}`}</p>
+                    </div>
+                    {/* <p className="text-red-200 font-bold">{item.price}</p> */}
                   </div>
                 </div>
                 <span className="font-bold text-lg">{`$${item.price}`}</span>
@@ -44,7 +49,7 @@ export default function ModalPopup({ cart, total, startNewOrder }) {
         </div>
         <button
           onClick={startNewOrder}
-          className="w-full px-4 py-2 bg-red-800 border-none rounded-full text-white capitalize font-bold text-2xl"
+          className="w-full px-4 py-2 bg-red-700 border-none rounded-full text-white capitalize font-bold text-lg my-4"
         >
           Start New Order
         </button>
