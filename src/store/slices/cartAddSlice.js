@@ -10,26 +10,51 @@ export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    increaseItems(state) {
-      state.value += 1;
+    increaseItemQtyInCart(state, { payload }) {
+      const newCartItems = state.cart?.map((item) => {
+        if (item.id === payload) {
+          item.qtyToBuy += 1;
+          return item;
+        }
+        return item;
+      });
+      state.cart = newCartItems;
     },
-    decreaseItems(state) {
-      if (state.value > 1) state.value -= 1;
+    decreaseItemQtyInCart(state, { payload }) {
+      const newCartItems = state.cart?.map((item) => {
+        if (item.id === payload) {
+          if (item.qtyToBuy <= 1) {
+            item.qtyToBuy = 1;
+          } else {
+            item.qtyToBuy -= 1;
+          }
+          return item;
+        }
+        return item;
+      });
+      state.cart = newCartItems;
     },
     addItemToCart(state, { payload: currentItem }) {
       const itemExists = state.cart.some((item) => item.id === currentItem.id);
 
       if (!itemExists) {
-        state.cart.push(currentItem);
+        const newItem = Object.assign({ qtyToBuy: 1 }, currentItem);
+        state.cart.push(newItem);
         state.totalCart += 1;
       }
     },
+    decreaseItems() {},
+    increaseItems() {},
+
     removeFromCart(state, { payload: currentItem }) {
       state.cart = state.cart.filter((item) => item.id !== currentItem.id);
       state.totalItems -= 1;
     },
     existsInCart(state, { payload: currentItem }) {
       return state.cart.some((item) => item.id === currentItem.id);
+    },
+    clearCart(state) {
+      state.cart = [];
     },
   },
 });
@@ -38,7 +63,10 @@ export const {
   addItemToCart,
   removeFromCart,
   existsInCart,
-  increaseItems,
+  increaseItemQtyInCart,
+  decreaseItemQtyInCart,
+  clearCart,
   decreaseItems,
+  increaseItems,
 } = cartSlice.actions;
 export default cartSlice.reducer;

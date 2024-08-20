@@ -3,17 +3,18 @@ import delFromCart from "../images/icon-remove-item.svg";
 import iconCarbon from "../images/icon-carbon-neutral.svg";
 import { useState } from "react";
 import ModalPopup from "./ModalPopup";
+import useCart from "../hooks/useCart";
 
 export default function AddedCart({ cart, removeItem }) {
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
-  const totalPrice = cart.reduce((total, item) => total + item.price, 0);
+  const { totalPrice } = useCart();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
-    setIsModalOpen(true); // Show the modal
+    setIsModalOpen(true);
   };
 
   const closeModal = () => {
-    setIsModalOpen(false); // Hide the modal
+    setIsModalOpen(false);
   };
 
   const handleStartNewOrder = () => {
@@ -36,7 +37,10 @@ export default function AddedCart({ cart, removeItem }) {
             /> */}
             <div className="">
               <h2 className="font-bold text-md text-black">{item.name}</h2>
-              <p className="text-gray-600">${item.price.toFixed(2)}</p>
+              <div className="flex space-x-2 justify-between">
+                <p className="text-gray-600">${item.price.toFixed(2)}</p>
+                <p className="text-gray-600">${item?.price * item?.qtyToBuy}</p>
+              </div>
             </div>
           </div>
           <img
@@ -53,9 +57,7 @@ export default function AddedCart({ cart, removeItem }) {
           <p className="text-gray-600 font-semibold text-lg capitalize">
             Order Total
           </p>
-          <p className="text-lg font-bold text-amber-900">
-            ${totalPrice.toFixed(2)}
-          </p>
+          <p className="text-lg font-bold text-amber-900">${totalPrice}</p>
         </div>
         <div className="bg-amber-100 flex items-center rounded-lg py-4 px-2">
           <img src={iconCarbon} alt="carbon-icon" />

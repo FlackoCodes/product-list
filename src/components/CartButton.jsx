@@ -1,31 +1,36 @@
-import { useDispatch, useSelector } from "react-redux";
-import { decreaseItems, increaseItems } from "../store/slices/cartAddSlice";
+/* eslint-disable react/prop-types */
+import { useDispatch } from "react-redux";
+import {
+  decreaseItemQtyInCart,
+  increaseItemQtyInCart,
+} from "../store/slices/cartAddSlice";
 import { FaMinus, FaPlus } from "react-icons/fa";
+import useCart from "../hooks/useCart";
 
-export default function Button({ handleClick }) {
+export default function Button({ item }) {
   const dispatch = useDispatch();
-  const count = useSelector((state) => state.cart.value);
+  const { cartItems } = useCart();
 
-  // Call the addToCart function passed as a prop
+  const cartItem = cartItems.find((x) => x.id === item.id);
+
+  const handleIncreaseQtyInCart = () => {
+    dispatch(increaseItemQtyInCart(item.id));
+  };
+
+  const handleDecreaseQtyInCart = () => {
+    dispatch(decreaseItemQtyInCart(item.id));
+  };
+
   return (
-    <button
-      onClick={handleClick}
-      className="mt-[-20%] font-bold text-lg bg-red-600 text-white border-[2px] border-red-600 rounded-full py-1 px-3 flex justify-between items-center gap-5"
-    >
+    <button className="mt-[-20%] font-bold text-lg bg-red-600 text-white border-[2px] border-red-600 rounded-full py-1 px-3 flex justify-between items-center gap-5">
       <FaMinus
+        onClick={() => handleDecreaseQtyInCart()}
         className="text-white"
-        onClick={(e) => {
-          e.stopPropagation(); // Prevents this click from bubbling up
-          dispatch(decreaseItems());
-        }}
       />
-      {count}
+      {cartItem?.qtyToBuy ?? 0}
       <FaPlus
+        onClick={() => handleIncreaseQtyInCart()}
         className="text-white"
-        onClick={(e) => {
-          e.stopPropagation(); // Prevents this click from bubbling up
-          dispatch(increaseItems());
-        }}
       />
     </button>
   );

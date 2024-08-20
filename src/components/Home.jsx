@@ -4,17 +4,11 @@ import Button from "./cartButton";
 import AddButton from "./AddButton";
 import Cart from "./EmptyCart";
 import AddedCart from "./AddedCart";
-import { useDispatch, useSelector } from "react-redux";
-import { addItemToCart, removeFromCart } from "../store/slices/cartAddSlice";
+import { useSelector } from "react-redux";
 
 export default function Home() {
-  const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cart);
   const totalCart = useSelector((state) => state.cart.totalCart);
-
-  const removeItem = (item) => {
-    dispatch(removeFromCart(item));
-  };
 
   const existsInCart = (currentItem) => {
     return cart.some((item) => item.id === currentItem.id);
@@ -27,7 +21,7 @@ export default function Home() {
           <h1 className="text-3xl font-bold text-zinc-900 mb-4">Desserts</h1>
         </div>
         <div className="grid lg:grid-cols-3 gap-4 md:grid-cols-2">
-          {data.map((item) => (
+          {data?.map((item) => (
             <div key={item.id}>
               <picture className="relative">
                 <source
@@ -42,11 +36,9 @@ export default function Home() {
                 />
                 <div className="flex justify-center mb-2">
                   {existsInCart(item) ? (
-                    <Button />
+                    <Button item={item} />
                   ) : (
-                    <AddButton
-                      addToCart={() => dispatch(addItemToCart(item))}
-                    />
+                    <AddButton item={item} />
                   )}
                 </div>
               </picture>
@@ -65,11 +57,7 @@ export default function Home() {
             your cart ({totalCart})
           </h2>
           <div className="flex flex-col items-center justify-center gap-1">
-            {cart.length ? (
-              <AddedCart cart={cart} removeItem={removeItem} />
-            ) : (
-              <Cart />
-            )}
+            {cart.length ? <AddedCart cart={cart} /> : <Cart />}
           </div>
         </div>
       </div>
