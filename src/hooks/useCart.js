@@ -42,7 +42,7 @@ const useCart = () => {
     clrCart,
     increaseQtyInCart,
     decreaseQtyInCart,
-    cartItems: cartItems ?? [],
+    cartItems: cartItems ?? [], // nullish coalescing returns the right hand side iff the left hand side is undefined and null
     totalPrice,
   };
 };
